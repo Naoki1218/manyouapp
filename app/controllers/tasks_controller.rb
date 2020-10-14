@@ -10,16 +10,16 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    if params[:back]
-      render :new
-    else
+    # if params[:back]
+    #   render :new
+    # else
       if @task.save
         # 一覧画面へ遷移して"ブログを作成しました！"とメッセージを表示します。
         redirect_to tasks_path, notice: "タスクを作成しました！"
       else
         # 入力フォームを再描画します。
         render :new
-      end
+      # end
     end
   end
 
@@ -45,10 +45,10 @@ class TasksController < ApplicationController
     redirect_to tasks_path, notice:"タスクを削除しました！"
   end
 
-  def confirm
-    @task = Task.new(task_params)
-    render :new if @task.invalid?
-  end
+  # def confirm
+  #   @task = Task.new(task_params)
+  #   render :new if @task.invalid?
+  # end
 
   private
   def task_params
