@@ -19,7 +19,7 @@
 </div>
 <div class="task_status">
   <%= form.label :task_status, "ステイタス" %>
-  <%= form.text_field :task_status %>
+  <%= form.select :task_status, [["未", "未"], ["済", "済"]], include_blank: "選択して下さい" %>
 </div>
 <%= form.submit %>
 <% end %>
