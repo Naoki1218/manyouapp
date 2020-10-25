@@ -2,6 +2,9 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
     @tasks = Task.order(id: "DESC")
+    if params[:sort_expired]
+      @tasks = Task.order(task_limit_on: "DESC")
+    end
   end
 
   def new
@@ -13,12 +16,12 @@ class TasksController < ApplicationController
     # if params[:back]
     #   render :new
     # else
-      if @task.save
-        # 一覧画面へ遷移して"ブログを作成しました！"とメッセージを表示します。
-        redirect_to tasks_path, notice: "タスクを作成しました！"
-      else
-        # 入力フォームを再描画します。
-        render :new
+    if @task.save
+      # 一覧画面へ遷移して"ブログを作成しました！"とメッセージを表示します。
+      redirect_to tasks_path, notice: "タスクを作成しました！"
+    else
+      # 入力フォームを再描画します。
+      render :new
       # end
     end
   end

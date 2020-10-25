@@ -3,5 +3,5 @@ class Task < ApplicationRecord
   validates :task_limit_on, presence: true
   validates :task_status, presence: true
 
-  enum task_status: { 未: 0, 済: 1 }
+  enum task_status: { 未着手: 0, 着手中: 1, 完了: 2 }
 end

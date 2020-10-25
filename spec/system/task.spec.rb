@@ -10,13 +10,13 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit new_task_path
 
         fill_in 'task[title]',with: 'task1'
-        select '未',from: 'task[task_status]'
+        select '未着手',from: 'task[task_status]'
         click_button 'commit'
         expect(page).to have_content 'task1'
         expect(page).to have_content '2020'
         expect(page).to have_content '11'
         expect(page).to have_content '12'
-        expect(page).to have_content '未'
+        expect(page).to have_content '未着手'
         # expect(page).to have_content 'task_failure'
       end
     end
@@ -39,6 +39,17 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
 
         expect(page).to have_content 'task'
+      end
+    end
+    context 'タスク終了期限でソートした場合' do
+      it '終了期限降順で表示される' do
+        # ここに実装する
+        visit tasks_path
+
+        click_on '終了期限でソートする'
+        task_list = all('tbody tr')
+        expect(task_list[0]).to have_content '2020-12-22'
+        expect(task_list[1]).to have_content '2020-11-12'
       end
     end
   end
