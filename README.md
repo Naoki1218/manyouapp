@@ -23,13 +23,10 @@ Label
 | ------------------------------------------------------ |
 |1.アセットプリコンパイルをする                              |
 | :$ rails assets:precompile RAILS_ENV=production       |
-| ----------------------------------------------------- |
 |2.コミットする                                           |
 | :~/workspace/manyouapp (master) $ git add -A          |
 | :~/workspace/manyouapp (master) $ git commit -m "init"|
-| ----------------------------------------------------- |
 |3.Herokuに新しいアプリケーションを作成                      |
 | :$ heroku create                                      |
-| ----------------------------------------------------- |
 |4.Herokuにデプロイをする                                  |
 | :$ git push heroku master                             |
