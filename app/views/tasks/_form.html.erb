@@ -27,9 +27,13 @@
    %>
 </div>
 <div class="task_status">
-  <%= form.label :task_status, "ステイタス" %>
+  <%= form.label :task_status, "ステータス" %>
   <%= form.select :task_status, [["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]], include_blank: "選択して下さい" %>
+</div>
+<div class="priority">
+  <%= form.label :priority, "優先順位" %>
+  <%= form.select :priority, [["低", "低"], ["中", "中"], ["高", "高"]], include_blank: "選択して下さい" %>
 </div>
 <%= form.submit %>
 <% end %>
-<%= link_to 'タスク一覧画面に戻る', tasks_path %>
+<%= link_to 'タスク一覧画面に戻る', tasks_path, class: "btn btn-primary btn-lg" %>
