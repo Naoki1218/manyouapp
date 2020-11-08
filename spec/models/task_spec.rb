@@ -29,7 +29,7 @@ RSpec.describe Task, type: :model do
         # ここに内容を記載する
         expect(Task.get_by_title('task1').get_by_task_status('未着手')).to include(@task1)
         expect(Task.get_by_title('task1').get_by_task_status('未着手')).not_to include(@task2)
-        expect(Task.get_by_title('task1').get_by_task_status('未着手')).count).to eq 1
+        expect(Task.get_by_title('task1').get_by_task_status('未着手').count).to eq 1
       end
     end
   end
