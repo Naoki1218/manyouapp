@@ -11,5 +11,6 @@ class Task < ApplicationRecord
 
   scope :get_by_title, -> (title) { where('title LIKE ?', "%#{title}%")}
   scope :get_by_task_status, -> (task_status) { where(task_status: task_status)}
+  # scope :unfinished, -> { where(done: false) }
   # scope :get_by_priority, -> (priority) { where(priority: priority)}
 end

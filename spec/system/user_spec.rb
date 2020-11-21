@@ -1,5 +1,6 @@
 require 'rails_helper'
 RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :system do
+
   def user_login
     visit new_session_path
     fill_in 'session[email]', with: 'test@test.com'
@@ -24,7 +25,7 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
         fill_in 'user[password_confirmation]', with: '11111111'
         click_on 'アカウント作成'
 
-        click_link 'Profile'
+        click_link 'マイページ'
 
         expect(page).to have_content 'テストのページ'
         expect(page).to have_content 'test@test.com'
@@ -36,7 +37,7 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
     end
   end
 
-  describe '新規登録機能' do
+  describe 'セッション機能のテスト' do
     before do
       @user = FactoryBot.create(:user)
       @admin_user = FactoryBot.create(:admin_user)
@@ -45,20 +46,26 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
 
     context 'ログインしていない状態でユーザーのデータが登録されている場合' do
       it 'ログインができること' do
+        # sleep 1
+        # visit new_session_path
+        # fill_in 'user[email]',with: 'test@test.com'
+        # fill_in 'user[password]',with: '11111111'
+        # click_button 'ログイン'
+
         expect(current_path).to eq root_path
       end
     end
 
     context '一般ユーザーでログインしている状態' do
       it '自分の詳細画面に飛べること' do
-        click_link 'Profile'
-
-        expect(current_path).to eq user_path(1)
+        click_link 'マイページ'
+        sleep 1
+        expect(page).to have_content 'テストのページ'
       end
 
       it '一般ユーザーが他人の詳細画面に飛ぶとタスク一覧ページに遷移すること' do
         sleep 1
-        visit user_path(2)
+        visit user_path(@admin_user.id)
         expect(current_path).to eq root_path
       end
 
@@ -112,15 +119,15 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
 
       it '管理者はユーザー詳細画面にアクセスできる' do
         sleep 1
-        click_link 'ユーザー情報詳細', href: admin_user_path(1)
-        visit user_path(1)
-        expect(current_path).to eq user_path(1)
+        click_link 'ユーザー情報詳細', href: admin_user_path(@user.id)
+        expect(current_path).to eq admin_user_path(@user.id)
+        expect(page).to have_content 'test@test.com'
       end
 
       it '管理者はユーザーの編集画面からユーザー情報を編集できる' do
         sleep 1
         visit admin_users_path
-        click_link 'ユーザー情報編集', href: edit_admin_user_path(1)
+        click_link 'ユーザー情報編集', href: edit_admin_user_path(@user.id)
 
         fill_in 'user[name]', with: 'test3'
         fill_in 'user[email]', with: 'test3@test3.com'
@@ -133,7 +140,7 @@ RSpec.describe 'ユーザ登録・ログイン・ログアウト機能', type: :
 
       it '管理者はユーザの削除をできること' do
         sleep 1
-        click_link 'ユーザー情報削除', href: admin_user_path(1)
+        click_link 'ユーザー情報削除', href: admin_user_path(@user.id)
         page.driver.browser.switch_to.alert.accept
 
         expect(page).to have_content 'ユーザー「テスト」を削除しました。'
