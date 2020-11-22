@@ -5,14 +5,21 @@ class User < ApplicationRecord
 
   before_validation { email.downcase! }
   before_destroy :admin_zero
+  before_update  :admin_authorization
 
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }
 
   has_many :tasks, foreign_key: :user_id, dependent: :destroy
+  # enum admin: { user: 0, admin: 1 }
 
 
   private
+
+  def admin_authorization
+    
+  end
+
   def admin_zero
     if User.where(admin: true).length == 1 && self.admin?
       throw(:abort)
