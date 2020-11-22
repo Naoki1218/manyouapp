@@ -5,8 +5,11 @@ RSpec.describe Task, type: :model do
     describe '検索機能' do
     # 必要に応じて、テストデータの内容を変更して構わない
     before do
-      @task1 = FactoryBot.create(:task, title: 'task1')
+      @user = FactoryBot.create(:user)
+      @admin_user = FactoryBot.create(:admin_user)
+      @task1 = FactoryBot.create(:task, title: 'task1', user: @user)
       @task2 = FactoryBot.create(:second_task, title: 'task2')
+      @task3 = FactoryBot.create(:second_task, title: 'task3', user: @admin_user)
     end
     context 'scopeメソッドでタイトルのあいまい検索をした場合' do
       it "検索キーワードを含むタスクが絞り込まれる" do

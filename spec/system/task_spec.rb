@@ -1,8 +1,14 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   before do
-    @task1 = FactoryBot.create(:task, title: 'task1')
-    @task2 = FactoryBot.create(:second_task, title: 'task2')
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(:admin_user)
+    @task1 = FactoryBot.create(:task, title: 'task1', user: @admin_user)
+    @task2 = FactoryBot.create(:second_task, title: 'task2', user: @admin_user)
+    visit new_session_path
+    fill_in 'Email',with: 'admin@admin.com'
+    fill_in 'Password',with: '00000000'
+    click_button 'ログイン'
   end
 
   describe '検索機能'do
@@ -11,7 +17,9 @@ RSpec.describe 'タスク管理機能', type: :system do
       visit tasks_path
       fill_in 'タイトル検索',with: 'task1'
       click_button 'Search'
+      sleep 0.5
       expect(page).to have_content 'task1'
+      # expect( Task.count ).to eq 2
     end
   end
 context 'ステータスを検索した場合'do
