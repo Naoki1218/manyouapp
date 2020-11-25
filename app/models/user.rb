@@ -17,7 +17,7 @@ class User < ApplicationRecord
   private
 
   def admin_authorization
-    
+
   end
 
   def admin_zero

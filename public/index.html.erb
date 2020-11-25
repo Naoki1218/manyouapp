@@ -6,8 +6,6 @@
   <%= form.text_field :title,value: params[:title] %>
   <%= form.label :task_status,'ステータス検索' %>
   <%= form.select :task_status,Task.task_statuses.keys, selected: params[:task_status],include_blank:"選択して下さい" %>
-  <%= form.label :name,'ラベル検索' %>
-  <%= form.select("label_id", Label.pluck(:name, :id), { include_blank: "ラベルを選択する" }) %>
   <%= form.submit 'Search' %>
   <% end %>
 </div>
@@ -30,11 +28,6 @@
       <td><%= link_to '詳細を確認する', task_path(task.id), class: "btn btn-outline-primary" %></td>
       <td><%= link_to "タスクを編集する", edit_task_path(task.id), class: "btn btn-outline-warning", data: { confirm: '本当に編集していいですか？' } %></td>
       <td><%= link_to 'タスクを削除する', task_path(task.id), class: "btn btn-outline-danger", method: :delete ,data: { confirm: '本当に削除していいですか？' } %></td>
-      <td>
-        <% task.labels.each do |label| %>
-          <%= label.name %>
-        <% end %>
-      </td>
     </tr>
     <% end %>
   </tbody>

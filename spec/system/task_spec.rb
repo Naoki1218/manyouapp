@@ -1,10 +1,12 @@
 require 'rails_helper'
 RSpec.describe 'タスク管理機能', type: :system do
   before do
+    @label = FactoryBot.create(:label)
     @user = FactoryBot.create(:user)
     @admin_user = FactoryBot.create(:admin_user)
     @task1 = FactoryBot.create(:task, title: 'task1', user: @admin_user)
     @task2 = FactoryBot.create(:second_task, title: 'task2', user: @admin_user)
+    @labelling = FactoryBot.create(:labelling, task: @task1, label: @label)
     visit new_session_path
     fill_in 'Email',with: 'admin@admin.com'
     fill_in 'Password',with: '00000000'
@@ -12,22 +14,30 @@ RSpec.describe 'タスク管理機能', type: :system do
   end
 
   describe '検索機能'do
-    context 'タイトルをあいまい検索した場合'do
-      it '入力値を含むタスクが表示される'do
-      visit tasks_path
-      fill_in 'タイトル検索',with: 'task1'
-      click_button 'Search'
-      sleep 0.5
-      expect(page).to have_content 'task1'
-      # expect( Task.count ).to eq 2
-    end
-  end
+  context 'タイトルをあいまい検索した場合'do
+  it '入力値を含むタスクが表示される'do
+  visit tasks_path
+  fill_in 'タイトル検索',with: 'task1'
+  click_button 'Search'
+  sleep 0.5
+  expect(page).to have_content 'task1'
+  # expect( Task.count ).to eq 2
+end
+end
 context 'ステータスを検索した場合'do
 it '選択したステータスを含むタスクが表示される'do
 visit tasks_path
 select '未着手',from: 'ステータス検索'
 click_button 'Search'
 expect(page).to have_content '未着手'
+end
+end
+context 'ラベルを検索した場合'do
+it '選択したラベルを含むタスクが表示される'do
+visit tasks_path
+select '新規',from: 'label_id'
+click_button 'Search'
+expect(page).to have_content 'task1'
 end
 end
 context 'タイトルをあいまい検索し,かつステータスを検索した場合'do
@@ -40,6 +50,28 @@ expect(page).to have_content 'task1'
 expect(page).to have_content '未着手'
 end
 end
+context 'タイトルをあいまい検索し,かつラベルを検索した場合'do
+it '入力値を含むタスクが表示され、かつ選択したラベルを含むタスクが表示される'do
+visit tasks_path
+fill_in 'タイトル検索',with: 'task1'
+select '新規',from: 'label_id'
+click_button 'Search'
+expect(page).to have_content 'task1'
+expect(page).to have_content '新規'
+end
+end
+context 'ステータスを検索し,かつラベルを検索した場合'do
+it '入力値を含むタスクが表示され、かつ選択したステータスとラベルを含むタスクが表示される'do
+visit tasks_path
+fill_in 'タイトル検索',with: 'task1'
+select '未着手',from: 'ステータス検索'
+select '新規',from: 'label_id'
+click_button 'Search'
+expect(page).to have_content 'task1'
+expect(page).to have_content '未着手'
+expect(page).to have_content '新規'
+end
+end
 end
 describe '新規作成機能' do
   context 'タスクを新規作成した場合' do
@@ -49,13 +81,15 @@ describe '新規作成機能' do
       fill_in 'Title',with: 'task1'
       select '未着手',from: 'ステータス'
       select '低',from: '優先順位'
-      click_button 'Create Task'
+      check '新規'
+      click_button '登録する'
       expect(page).to have_content 'task1'
       expect(page).to have_content '2020'
       expect(page).to have_content '11'
       expect(page).to have_content '12'
       expect(page).to have_content '未着手'
       expect(page).to have_content '低'
+      expect(page).to have_content '新規'
       # expect(page).to have_content 'task_failure'
     end
   end
