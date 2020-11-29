@@ -63,7 +63,7 @@ users = User.create(
     }
   ]
 )
-puts users
+
 Label.create(name:'新規' )
 Label.create(name:'リピート' )
 Label.create(name:'修理' )
